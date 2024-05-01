@@ -9,6 +9,7 @@ import {
   TextInput,
 } from "react-native";
 import BookStorage from "../../storages/BookStorage";
+import BookService from "../../services/BookService";
 
 export default function BookForm() {
   const navigation = useNavigation();
@@ -24,6 +25,7 @@ export default function BookForm() {
   const onLoad = async () => {
     const { id } = route.params;
     if (id) {
+      let book = await BookService.getItemDetail({"id":id});
       setKey(id);
       setName("Example Book");
       setPrice("100");
@@ -39,7 +41,15 @@ export default function BookForm() {
     //A NEW ITEM
     let new_data = { "id": key, "name": name, "price": price, "image": image };
     //SAVE
-    await BookStorage.writeItem(new_data);
+    // await BookStorage.writeItem(new_data);
+    const { id } = route.params;
+    if(id){
+      await BookService.updateItem(new_data);
+    }else{
+      await BookService.storeItem(new_data);
+    }
+
+
     //REDIRECT TO
     navigation.navigate("Book");
   };

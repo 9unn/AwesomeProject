@@ -38,7 +38,7 @@ export default function Book() {
   ]);
 
   const loadBooks = async () => {
-    let books = await BookStorage.readItems();
+    let books = await BookService.getItems();
     setBooks(books);
   };
   useEffect(() => {
